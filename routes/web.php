@@ -21,3 +21,5 @@ Route::post('/app/create_tag',[AdminController::class,'createtag']);
 Route::post('/app/edit_tag',[AdminController::class,'editetag']);
 Route::post('/app/delete_tag',[AdminController::class,'deletetag']);
 Route::get('/app/get_tags',[AdminController::class,'gettags']);
+Route::get('/app/get_categories',[AdminController::class,'getcategories']);
+Route::post('/app/upload',[AdminController::class,'uploadimage']);

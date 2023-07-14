@@ -6,7 +6,8 @@ import methods from './components/pages/basic/methods.vue'
 
 // project pages
 import home from './components/pages/home'
-import tags from './components/pages/tags'
+import tags from './admin/pages/tags'
+import category from './admin/pages/category'
 Vue.use(VueRouter)
 
 
@@ -23,9 +24,11 @@ const routes = [
         component: tags,
 
     },
+    {
+        path: '/category',
+        component: category,
 
-
-
+    },
 
     /// basic tutorials routes...
 

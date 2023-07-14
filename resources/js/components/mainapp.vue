@@ -24,6 +24,9 @@
               <li >
                 <router-link to='/tags'> Tag</router-link>
               </li>
+              <li >
+                <router-link to='/category'> Category</router-link>
+              </li>
 
 
               <!-- <li><router-link to="tags"><Icon type="ios-speedometer" /> Tags</router-link></li>
