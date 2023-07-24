@@ -19,6 +19,7 @@
               <tr>
                 <th>ID</th>
                 <th>Category Name</th>
+                <th>Image</th>
                 <th>Created at</th>
                 <th>Action</th>
               </tr>
@@ -32,8 +33,10 @@
               >
                 <td>{{ category.id }}</td>
                 <td class="_table_name">{{ category.categoryName }}</td>
+                <td ><img :src="category.iconImage" style="width: 50px;"></td>
                 <td>{{ category.created_at }}</td>
                 <td>
+
                   <Button
                     type="info"
                     size="small"
@@ -54,7 +57,7 @@
         </div>
         <Modal
           v-model="addModal"
-          title="Add tag"
+          title="Add Category"
           :mask-closable="false"
           :closable="false"
         >
@@ -93,8 +96,8 @@
 
           <div slot="footer">
             <Button type="default" @click="addModal = false">Close</Button>
-            <Button @click="addTag" :disabled="isAdding" :loading="isAdding">{{
-              isAdding ? "Adding ..." : "Add tag"
+            <Button @click="addCategory" :disabled="isAdding" :loading="isAdding">{{
+              isAdding ? "Adding ..." : "Add Category"
             }}</Button>
           </div>
         </Modal>
@@ -172,20 +175,22 @@ export default {
     };
   },
   methods: {
-    async addTag() {
-      if (this.data.categoryName.trim() == "")
-        return this.e("Tag Name is required");
-      const res = await this.callApi("post", "/app/create_tag", this.data);
+    async addCategory() {
+      if (this.data.categoryName.trim() == "") return this.e('category Name is required')
+      if (this.data.iconImage.trim() == "") return this.e('Icon Image is required')
+      this.data.iconImage =    `/uploads/${this.data.iconImage}`
+      const res = await this.callApi("post", "/app/create_category", this.data);
       if (res.status == 200) {
-        this.categories.unshift(res.data.category);
-        this.s("Tag has been Added Successfully!");
+        this.categories.unshift(res.data.categroy);
+        this.s("Category has been Added Successfully!");
         this.addModal = false;
-        this.data.tagName = "";
+        this.data.categoryName = "";
+        this.data.iconImage = "";
+
       } else {
+
         if ((res.status = 422)) {
-          if (res.data.errors.tagName) {
-            this.e(res.data.errors.tagName[0]);
-          }
+
         } else {
           this.swr();
         }
@@ -226,7 +231,7 @@ export default {
 
     async showEditModal(tag, index) {
       let obj = {
-        id: tag.id,
+        id: category.id,
         tagName: tag.tagName,
       };
 

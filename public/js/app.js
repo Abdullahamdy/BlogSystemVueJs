@@ -2219,6 +2219,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2243,7 +2246,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     };
   },
   methods: {
-    addTag: function addTag() {
+    addCategory: function addCategory() {
       var _this = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var res;
@@ -2254,27 +2257,31 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _context.next = 2;
                 break;
               }
-              return _context.abrupt("return", _this.e("Tag Name is required"));
+              return _context.abrupt("return", _this.e('category Name is required'));
             case 2:
-              _context.next = 4;
-              return _this.callApi("post", "/app/create_tag", _this.data);
+              if (!(_this.data.iconImage.trim() == "")) {
+                _context.next = 4;
+                break;
+              }
+              return _context.abrupt("return", _this.e('Icon Image is required'));
             case 4:
+              _this.data.iconImage = "/uploads/".concat(_this.data.iconImage);
+              _context.next = 7;
+              return _this.callApi("post", "/app/create_category", _this.data);
+            case 7:
               res = _context.sent;
               if (res.status == 200) {
-                _this.categories.unshift(res.data.category);
-                _this.s("Tag has been Added Successfully!");
+                _this.categories.unshift(res.data.categroy);
+                _this.s("Category has been Added Successfully!");
                 _this.addModal = false;
-                _this.data.tagName = "";
+                _this.data.categoryName = "";
+                _this.data.iconImage = "";
               } else {
-                if (res.status = 422) {
-                  if (res.data.errors.tagName) {
-                    _this.e(res.data.errors.tagName[0]);
-                  }
-                } else {
+                if (res.status = 422) {} else {
                   _this.swr();
                 }
               }
-            case 6:
+            case 9:
             case "end":
               return _context.stop();
           }
@@ -2355,7 +2362,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
               obj = {
-                id: tag.id,
+                id: category.id,
                 tagName: tag.tagName
               };
               _this4.editData = obj;
@@ -67399,6 +67406,13 @@ var render = function () {
                               _vm._v(_vm._s(category.categoryName)),
                             ]),
                             _vm._v(" "),
+                            _c("td", [
+                              _c("img", {
+                                staticStyle: { width: "50px" },
+                                attrs: { src: category.iconImage },
+                              }),
+                            ]),
+                            _vm._v(" "),
                             _c("td", [_vm._v(_vm._s(category.created_at))]),
                             _vm._v(" "),
                             _c(
@@ -67449,7 +67463,7 @@ var render = function () {
             "Modal",
             {
               attrs: {
-                title: "Add tag",
+                title: "Add Category",
                 "mask-closable": false,
                 closable: false,
               },
@@ -67550,9 +67564,13 @@ var render = function () {
                     "Button",
                     {
                       attrs: { disabled: _vm.isAdding, loading: _vm.isAdding },
-                      on: { click: _vm.addTag },
+                      on: { click: _vm.addCategory },
                     },
-                    [_vm._v(_vm._s(_vm.isAdding ? "Adding ..." : "Add tag"))]
+                    [
+                      _vm._v(
+                        _vm._s(_vm.isAdding ? "Adding ..." : "Add Category")
+                      ),
+                    ]
                   ),
                 ],
                 1
@@ -67701,6 +67719,8 @@ var staticRenderFns = [
       _c("th", [_vm._v("ID")]),
       _vm._v(" "),
       _c("th", [_vm._v("Category Name")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Image")]),
       _vm._v(" "),
       _c("th", [_vm._v("Created at")]),
       _vm._v(" "),

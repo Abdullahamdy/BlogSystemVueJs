@@ -59,7 +59,14 @@ class AdminController extends Controller
         $this->deleteFileFromServer($fileName);
         return 'done';
     }
-
+    public function addcategory(Request $request){
+        $this->validate($request, [
+            'categoryName' => 'required',
+            'iconImage' => 'required',
+        ]);
+        $categroy = Category::create($request->all());
+        return response()->json(['status' => 200, 'categroy' => $categroy]);
+    }
     public function deleteFileFromServer($fileName)
     {
         if (file_exists(public_path('uploads/' . $fileName))) {
@@ -67,4 +74,7 @@ class AdminController extends Controller
         }
         return ;
     }
+
+
+
 }
