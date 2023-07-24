@@ -10,42 +10,41 @@ class AdminController extends Controller
 {
     public function createtag(Request $request)
     {
-        $this->validate($request,[
-            'tagName'=>'required'
+        $this->validate($request, [
+            'tagName' => 'required'
         ]);
-       $tag = Tag::create(['tagName' => $request->tagName]);
-        return response()->json(['status'=>200,'tag'=>$tag]);
-
+        $tag = Tag::create(['tagName' => $request->tagName]);
+        return response()->json(['status' => 200, 'tag' => $tag]);
     }
 
-    public function gettags(){
+    public function gettags()
+    {
 
-        return Tag::orderBy('id','desc')->get();
-
+        return Tag::orderBy('id', 'desc')->get();
     }
-    public function editetag(Request $request){
-        $this->validate($request,[
-            'id'=>'required',
-            'tagName'=>'required',
+    public function editetag(Request $request)
+    {
+        $this->validate($request, [
+            'id' => 'required',
+            'tagName' => 'required',
         ]);
-        return   Tag::where('id',$request->id)->update([
-            'tagName'=>$request->tagName,
+        return   Tag::where('id', $request->id)->update([
+            'tagName' => $request->tagName,
         ]);
-
-
     }
 
-    public function deletetag(Request $request){
-       $tag =   Tag::where('id',$request->id)->first();
-       $tag->delete();
-
-
+    public function deletetag(Request $request)
+    {
+        $tag =   Tag::where('id', $request->id)->first();
+        $tag->delete();
     }
-    public function getcategories(){
-        return Category::orderBy('id','desc')->get();
+    public function getcategories()
+    {
+        return Category::orderBy('id', 'desc')->get();
     }
 
-    public function uploadimage(Request $request){
+    public function uploadimage(Request $request)
+    {
         $this->validate($request, [
             'file' => 'required|mimes:jpeg,jpg,png',
         ]);
@@ -54,4 +53,18 @@ class AdminController extends Controller
         return $picName;
     }
 
+    public function deleteImage(Request $request)
+    {
+        $fileName = $request->imageName;
+        $this->deleteFileFromServer($fileName);
+        return 'done';
+    }
+
+    public function deleteFileFromServer($fileName)
+    {
+        if (file_exists(public_path('uploads/' . $fileName))) {
+            unlink(public_path('uploads/' . $fileName));
+        }
+        return ;
+    }
 }

@@ -2212,6 +2212,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
@@ -2274,93 +2281,120 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee);
       }))();
     },
-    //edit data funciton
-    editTag: function editTag() {
+    deleteImage: function deleteImage() {
       var _this2 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-        var res;
+        var image, res;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
-              if (!(_this2.editData.tagName.trim() == "")) {
-                _context2.next = 2;
-                break;
-              }
-              return _context2.abrupt("return", _this2.e("Tag Name is required"));
-            case 2:
-              _context2.next = 4;
-              return _this2.callApi("post", "/app/edit_tag", _this2.editData);
-            case 4:
+              image = _this2.data.iconImage;
+              _this2.data.iconImage = "";
+              _this2.$refs.uploads.clearFiles();
+              _context2.next = 5;
+              return _this2.callApi("post", "/app/delete-img", {
+                imageName: image
+              });
+            case 5:
               res = _context2.sent;
-              if (res.status == 200) {
-                _this2.tags[_this2.index].tagName = _this2.editData.tagName;
-                _this2.s("Tag has been updated Successfully!");
-                _this2.editModal = false;
-              } else {
-                if (res.status = 422) {
-                  if (res.data.errors.tagName) {
-                    _this2.e(res.data.errors.tagName[0]);
-                  }
-                } else {
-                  _this2.swr();
-                }
+              if (res.status != 200) {
+                _this2.data.iconImage = image;
+                _this2.swr();
               }
-            case 6:
+            case 7:
             case "end":
               return _context2.stop();
           }
         }, _callee2);
       }))();
     },
-    //end edit data function
-    showEditModal: function showEditModal(tag, index) {
+    //edit data funciton
+    editTag: function editTag() {
       var _this3 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-        var obj;
+        var res;
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
-              obj = {
-                id: tag.id,
-                tagName: tag.tagName
-              };
-              _this3.editData = obj;
-              _this3.editModal = true;
-              _this3.index = index;
+              if (!(_this3.editData.tagName.trim() == "")) {
+                _context3.next = 2;
+                break;
+              }
+              return _context3.abrupt("return", _this3.e("Tag Name is required"));
+            case 2:
+              _context3.next = 4;
+              return _this3.callApi("post", "/app/edit_tag", _this3.editData);
             case 4:
+              res = _context3.sent;
+              if (res.status == 200) {
+                _this3.tags[_this3.index].tagName = _this3.editData.tagName;
+                _this3.s("Tag has been updated Successfully!");
+                _this3.editModal = false;
+              } else {
+                if (res.status = 422) {
+                  if (res.data.errors.tagName) {
+                    _this3.e(res.data.errors.tagName[0]);
+                  }
+                } else {
+                  _this3.swr();
+                }
+              }
+            case 6:
             case "end":
               return _context3.stop();
           }
         }, _callee3);
       }))();
     },
-    /// end edit tag
-    //delete tag
-    Deletetag: function Deletetag() {
+    //end edit data function
+    showEditModal: function showEditModal(tag, index) {
       var _this4 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-        var res;
+        var obj;
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
-              _this4.isDeleting = true;
-              _context4.next = 3;
-              return _this4.callApi("post", "/app/delete_tag", _this4.deleteItem);
-            case 3:
-              res = _context4.sent;
-              if (res.status == 200) {
-                _this4.tags.splice(_this4.DeletingIndex, 1);
-                _this4.s("Tag has been deleteted successfully");
-              } else {
-                _this4.swr();
-              }
-              _this4.isDeleting = false;
-              _this4.showDeleteModal = false;
-            case 7:
+              obj = {
+                id: tag.id,
+                tagName: tag.tagName
+              };
+              _this4.editData = obj;
+              _this4.editModal = true;
+              _this4.index = index;
+            case 4:
             case "end":
               return _context4.stop();
           }
         }, _callee4);
+      }))();
+    },
+    /// end edit tag
+    //delete tag
+    Deletetag: function Deletetag() {
+      var _this5 = this;
+      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+        var res;
+        return _regeneratorRuntime().wrap(function _callee5$(_context5) {
+          while (1) switch (_context5.prev = _context5.next) {
+            case 0:
+              _this5.isDeleting = true;
+              _context5.next = 3;
+              return _this5.callApi("post", "/app/delete_tag", _this5.deleteItem);
+            case 3:
+              res = _context5.sent;
+              if (res.status == 200) {
+                _this5.tags.splice(_this5.DeletingIndex, 1);
+                _this5.s("Tag has been deleteted successfully");
+              } else {
+                _this5.swr();
+              }
+              _this5.isDeleting = false;
+              _this5.showDeleteModal = false;
+            case 7:
+            case "end":
+              return _context5.stop();
+          }
+        }, _callee5);
       }))();
     },
     showDeletingModal: function showDeletingModal(tag, i) {
@@ -2377,7 +2411,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     handleError: function handleError(res, file) {
       this.$Notice.warning({
         title: "file format is incorrect",
-        desc: "".concat(file.errors.file.length ? file.errors.file[0] : ' Something wrong')
+        desc: "".concat(file.errors.file.length ? file.errors.file[0] : " Something wrong")
       });
     },
     handleFormatError: function handleFormatError(file) {
@@ -2394,27 +2428,27 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   created: function created() {
-    var _this5 = this;
-    return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+    var _this6 = this;
+    return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
       var res;
-      return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-        while (1) switch (_context5.prev = _context5.next) {
+      return _regeneratorRuntime().wrap(function _callee6$(_context6) {
+        while (1) switch (_context6.prev = _context6.next) {
           case 0:
-            _this5.token = window.Laravel.csrfToken;
-            _context5.next = 3;
-            return _this5.callApi("get", "/app/get_categories");
+            _this6.token = window.Laravel.csrfToken;
+            _context6.next = 3;
+            return _this6.callApi("get", "/app/get_categories");
           case 3:
-            res = _context5.sent;
+            res = _context6.sent;
             if (res.status == 200) {
-              _this5.categories = res.data;
+              _this6.categories = res.data;
             } else {
-              _this5.swr();
+              _this6.swr();
             }
           case 5:
           case "end":
-            return _context5.stop();
+            return _context6.stop();
         }
-      }, _callee5);
+      }, _callee6);
     }))();
   }
 });
@@ -67341,7 +67375,7 @@ var render = function () {
                     },
                     [
                       _c("Icon", { attrs: { type: "md-add" } }),
-                      _vm._v(" Add tag"),
+                      _vm._v(" Add Category"),
                     ],
                     1
                   ),
@@ -67431,6 +67465,7 @@ var render = function () {
               _c(
                 "Upload",
                 {
+                  ref: "uploads",
                   attrs: {
                     type: "drag",
                     headers: {
@@ -67468,6 +67503,18 @@ var render = function () {
                     _c("img", {
                       attrs: { src: "uploads/" + _vm.data.iconImage },
                     }),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "demo-upload-list-cover" },
+                      [
+                        _c("Icon", {
+                          attrs: { type: "ios-trash-outline" },
+                          on: { click: _vm.deleteImage },
+                        }),
+                      ],
+                      1
+                    ),
                   ])
                 : _vm._e(),
               _vm._v(" "),

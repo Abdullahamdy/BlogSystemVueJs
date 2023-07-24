@@ -9,7 +9,7 @@
           <p class="_title0">
             Tags
             <Button @click="addModal = true"
-              ><Icon type="md-add" /> Add tag</Button
+              ><Icon type="md-add" /> Add Category</Button
             >
           </p>
 
@@ -59,11 +59,15 @@
           :closable="false"
         >
           <Upload
+          ref="uploads"
             type="drag"
-            :headers="{'x-csrf-token' : token, 'X-Requested-With' : 'XMLHttpRequest'}"
+            :headers="{
+              'x-csrf-token': token,
+              'X-Requested-With': 'XMLHttpRequest',
+            }"
             :on-success="handleSuccess"
             :on-error="handleError"
-            :format="['jpg','jpeg','png']"
+            :format="['jpg', 'jpeg', 'png']"
             :max-size="2048"
             :on-format-error="handleFormatError"
             :on-exceeded-size="handleMaxSize"
@@ -80,6 +84,9 @@
           </Upload>
           <div class="demo-upload-list" v-if="data.iconImage">
             <img :src="`uploads/${data.iconImage}`" />
+            <div class="demo-upload-list-cover">
+              <Icon type="ios-trash-outline" @click="deleteImage"></Icon>
+            </div>
           </div>
 
           <Input v-model="data.categoryName" placeholder="Add Category name" />
@@ -146,7 +153,7 @@ export default {
   data() {
     return {
       data: {
-          iconImage: "",
+        iconImage: "",
         categoryName: "",
       },
       addModal: false,
@@ -182,6 +189,16 @@ export default {
         } else {
           this.swr();
         }
+      }
+    },
+    async deleteImage() {
+        let image = this.data.iconImage ;
+        this.data.iconImage = "";
+        this.$refs.uploads.clearFiles();
+      const res = await this.callApi("post", "/app/delete-img", {imageName:image});
+      if(res.status != 200){
+        this.data.iconImage = image;
+        this.swr();
       }
     },
 
@@ -251,12 +268,13 @@ export default {
     handleSuccess(res, file) {
       this.data.iconImage = res;
     },
-    handleError(res,file){
-        this.$Notice.warning({
+    handleError(res, file) {
+      this.$Notice.warning({
         title: "file format is incorrect",
-        desc:  `${file.errors.file.length ? file.errors.file[0] : ' Something wrong'}`,
+        desc: `${
+          file.errors.file.length ? file.errors.file[0] : " Something wrong"
+        }`,
       });
-
     },
     handleFormatError(file) {
       this.$Notice.warning({
@@ -273,7 +291,6 @@ export default {
         desc: "File  " + file.name + " is too large, no more than 2M.",
       });
     },
-
   },
 
   async created() {
