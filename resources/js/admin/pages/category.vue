@@ -7,7 +7,7 @@
           class="_1adminOverveiw_table_recent _box_shadow _border_radious _mar_b30 _p20"
         >
           <p class="_title0">
-            Tags
+            Categories
             <Button @click="addModal = true"
               ><Icon type="md-add" /> Add Category</Button
             >
@@ -161,7 +161,7 @@
             <span>Delete confirmation!</span>
           </p>
           <div style="text-align: center">
-            <p>Are you sure Delete this Tag</p>
+            <p>Are you sure Delete this Category</p>
           </div>
           <div slot="footer">
             <Button type="default" size="large" @click="showDeleteModal = false"
@@ -172,7 +172,7 @@
               size="large"
               :loading="isDeleting"
               :disabled="isDeleting"
-              @click="Deletetag"
+              @click="Deletecategory"
               >Deletee</Button
             >
           </div>
@@ -292,20 +292,20 @@ export default {
       this.index = index;
       this.IsEditingItem = true
     },
-    /// end edit tag
+    /// end edit category
 
-    //delete tag
+    //delete category
 
-    async Deletetag() {
+    async Deletecategory() {
       this.isDeleting = true;
       const res = await this.callApi(
         "post",
-        "/app/delete_tag",
+        "/app/delete_category",
         this.deleteItem
       );
       if (res.status == 200) {
-        this.tags.splice(this.DeletingIndex, 1);
-        this.s("Tag has been deleteted successfully");
+        this.categories.splice(this.DeletingIndex, 1);
+        this.s("Category has been deleteted successfully");
       } else {
         this.swr();
       }
@@ -313,12 +313,12 @@ export default {
       this.showDeleteModal = false;
     },
 
-    showDeletingModal(tag, i) {
-      this.deleteItem = tag;
+    showDeletingModal(category, i) {
+      this.deleteItem = category;
       this.DeletingIndex = i;
       this.showDeleteModal = true;
     },
-    //end delete tag
+    //end delete category
 
     //file funciton
 

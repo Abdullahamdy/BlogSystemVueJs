@@ -2426,9 +2426,9 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee4);
       }))();
     },
-    /// end edit tag
-    //delete tag
-    Deletetag: function Deletetag() {
+    /// end edit category
+    //delete category
+    Deletecategory: function Deletecategory() {
       var _this5 = this;
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
         var res;
@@ -2437,12 +2437,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             case 0:
               _this5.isDeleting = true;
               _context5.next = 3;
-              return _this5.callApi("post", "/app/delete_tag", _this5.deleteItem);
+              return _this5.callApi("post", "/app/delete_category", _this5.deleteItem);
             case 3:
               res = _context5.sent;
               if (res.status == 200) {
-                _this5.tags.splice(_this5.DeletingIndex, 1);
-                _this5.s("Tag has been deleteted successfully");
+                _this5.categories.splice(_this5.DeletingIndex, 1);
+                _this5.s("Category has been deleteted successfully");
               } else {
                 _this5.swr();
               }
@@ -2455,12 +2455,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         }, _callee5);
       }))();
     },
-    showDeletingModal: function showDeletingModal(tag, i) {
-      this.deleteItem = tag;
+    showDeletingModal: function showDeletingModal(category, i) {
+      this.deleteItem = category;
       this.DeletingIndex = i;
       this.showDeleteModal = true;
     },
-    //end delete tag
+    //end delete category
     //file funciton
     handleSuccess: function handleSuccess(res, file) {
       res = "/uploads/".concat(res);
@@ -67483,7 +67483,7 @@ var render = function () {
                 "p",
                 { staticClass: "_title0" },
                 [
-                  _vm._v("\n          Tags\n          "),
+                  _vm._v("\n          Categories\n          "),
                   _c(
                     "Button",
                     {
@@ -67868,7 +67868,7 @@ var render = function () {
               ),
               _vm._v(" "),
               _c("div", { staticStyle: { "text-align": "center" } }, [
-                _c("p", [_vm._v("Are you sure Delete this Tag")]),
+                _c("p", [_vm._v("Are you sure Delete this Category")]),
               ]),
               _vm._v(" "),
               _c(
@@ -67897,7 +67897,7 @@ var render = function () {
                         loading: _vm.isDeleting,
                         disabled: _vm.isDeleting,
                       },
-                      on: { click: _vm.Deletetag },
+                      on: { click: _vm.Deletecategory },
                     },
                     [_vm._v("Deletee")]
                   ),

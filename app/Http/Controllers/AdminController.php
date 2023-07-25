@@ -89,4 +89,16 @@ class AdminController extends Controller
         ]);
     }
 
+    public function deletecategory(Request $request){
+
+        $category =   Category::where('id', $request->id)->first();
+        $fileName = $category->iconImage;
+        if($category){
+            if (file_exists(public_path( $fileName))) {
+                unlink(public_path($fileName));
+                $category->delete();
+            }
+        }
+    }
+
 }
