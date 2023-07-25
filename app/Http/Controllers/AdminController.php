@@ -69,12 +69,24 @@ class AdminController extends Controller
     }
     public function deleteFileFromServer($fileName)
     {
-        if (file_exists(public_path('uploads/' . $fileName))) {
-            unlink(public_path('uploads/' . $fileName));
+
+        if (file_exists(public_path(request()->isAdd ? 'uploads/' . $fileName:$fileName))) {
+            unlink(public_path(request()->isAdd ? 'uploads/' . $fileName :$fileName));
         }
         return ;
     }
 
+    public function editcategory(Request $request)
+    {
 
+        $this->validate($request, [
+            'id' => 'required',
+            'categoryName' => 'required',
+        ]);
+        return   Category::where('id', $request->id)->update([
+            'categoryName' => $request->categoryName,
+            'iconImage' => $request->iconImage,
+        ]);
+    }
 
 }
