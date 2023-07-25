@@ -26,3 +26,6 @@ Route::post('/app/create_category',[AdminController::class,'addcategory']);
 Route::post('/app/edit_category',[AdminController::class,'editcategory']);
 Route::post('/app/upload',[AdminController::class,'uploadimage']);
 Route::post('/app/delete-img',[AdminController::class,'deleteImage']);
+Route::any('{slug}', function(){
+    return view('welcome');
+});

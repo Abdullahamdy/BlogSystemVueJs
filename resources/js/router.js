@@ -8,6 +8,7 @@ import methods from './components/pages/basic/methods.vue'
 import home from './components/pages/home'
 import tags from './admin/pages/tags'
 import category from './admin/pages/category'
+import notfound from './admin/pages/notfound'
 Vue.use(VueRouter)
 
 
@@ -19,6 +20,13 @@ const routes = [
         component: home,
 
     },
+    {
+        path: '*',
+        component: notfound,
+        name: 'notfound'
+
+    },
+
     {
         path: '/tags',
         component: tags,
@@ -51,7 +59,7 @@ const router = new VueRouter(
     {
         routes,
         hashbang : false,
-        mode : 'history'
+        mode : 'history',
     }
     )
 
