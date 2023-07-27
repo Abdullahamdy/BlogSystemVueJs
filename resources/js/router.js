@@ -9,6 +9,7 @@ import home from './components/pages/home'
 import tags from './admin/pages/tags'
 import category from './admin/pages/category'
 import notfound from './admin/pages/notfound'
+import adminusers from './admin/pages/adminusers'
 Vue.use(VueRouter)
 
 
@@ -30,6 +31,11 @@ const routes = [
     {
         path: '/tags',
         component: tags,
+
+    },
+    {
+        path: '/adminusers',
+        component: adminusers,
 
     },
     {
