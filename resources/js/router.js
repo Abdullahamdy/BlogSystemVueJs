@@ -10,6 +10,7 @@ import tags from './admin/pages/tags'
 import category from './admin/pages/category'
 import notfound from './admin/pages/notfound'
 import adminusers from './admin/pages/adminusers'
+import login from './admin/pages/Login.vue'
 Vue.use(VueRouter)
 
 
@@ -24,6 +25,12 @@ const routes = [
     {
         path: '*',
         component: notfound,
+        name: 'notfound'
+
+    },
+    {
+        path: '/login',
+        component: login,
         name: 'notfound'
 
     },

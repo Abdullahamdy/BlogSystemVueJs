@@ -31,6 +31,7 @@ Route::get('/app/get_users',[AdminController::class,'getusers']);
 Route::post('/app/create_user',[AdminController::class,'createuser']);
 Route::post('/app/edit_user',[AdminController::class,'edituser']);
 Route::post('/app/delete_user',[AdminController::class,'deleteuser']);
+Route::post('/app/admin_login',[AdminController::class,'adminLogin']);
 
 Route::any('{slug}', function(){
     return view('welcome');

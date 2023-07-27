@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
@@ -146,6 +147,19 @@ class AdminController extends Controller
     public function deleteuser(Request $request){
         $user =   User::where('id', $request->id)->first();
         $user->delete();
+    }
+
+    public function adminLogin(Request $request){
+        $this->validate($request, [
+            'email' => 'bail|required|email',
+            'password' => 'bail|required|min:6',
+        ]);
+        if(Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
+             return response()->json(['msg'=>'YOu Are Login']);
+            }else{
+            return response()->json(['msg'=>'Invalid Credentials'],401);
+
+        }
     }
 
 }
