@@ -45,6 +45,7 @@
                   >
                   <Button
                     @click="showDeletingModal(category, i)"
+                    :loading="category.isDeleting"
                     type="error"
                     size="small"
                     >Delete</Button
@@ -150,39 +151,15 @@
         </Modal>
 
         <!-- delete alert modal -->
-        <Modal
-          :value="showDeleteModal"
-          :mask-closable="false"
-          :closable="false"
-          width="360"
-        >
-          <p slot="header" style="color: #f60; text-align: center">
-            <Icon type="ios-information-circle"></Icon>
-            <span>Delete confirmation!</span>
-          </p>
-          <div style="text-align: center">
-            <p>Are you sure Delete this Category</p>
-          </div>
-          <div slot="footer">
-            <Button type="default" size="large" @click="showDeleteModal = false"
-              >Close</Button
-            >
-            <Button
-              type="error"
-              size="large"
-              :loading="isDeleting"
-              :disabled="isDeleting"
-              @click="Deletecategory"
-              >Deletee</Button
-            >
-          </div>
-        </Modal>
+        <deleteModal></deleteModal>
       </div>
     </div>
   </div>
 </template>
 
   <script>
+  import deleteModal from "../components/deleteModal.vue";
+  import { mapGetters } from "vuex";
 export default {
   data() {
     return {
@@ -200,9 +177,9 @@ export default {
       },
       index: -1,
       showDeleteModal: false,
-      isDeleting: false,
+      isDeleting:false,
       deleteItem: {},
-      DeletingIndex: -1,
+      deletingIndex: -1,
       token: "",
       IsIconImageNew:false,
       IsEditingItem : false,
@@ -296,27 +273,18 @@ export default {
 
     //delete category
 
-    async Deletecategory() {
-      this.isDeleting = true;
-      const res = await this.callApi(
-        "post",
-        "/app/delete_category",
-        this.deleteItem
-      );
-      if (res.status == 200) {
-        this.categories.splice(this.DeletingIndex, 1);
-        this.s("Category has been deleteted successfully");
-      } else {
-        this.swr();
-      }
-      this.isDeleting = false;
-      this.showDeleteModal = false;
-    },
+
 
     showDeletingModal(category, i) {
-      this.deleteItem = category;
-      this.DeletingIndex = i;
-      this.showDeleteModal = true;
+      const deleteModalObj = {
+        showDeleteModal: true,
+        deleteUrl: "app/delete_category",
+        data: category,
+        deletingIndex: i,
+        isDeleted: false
+      };
+      this.$store.commit("setDeletingModalObj", deleteModalObj);
+       this.deletingIndex = i
     },
     //end delete category
 
@@ -353,6 +321,9 @@ export default {
       });
     },
   },
+  components: {
+    deleteModal
+  },
 
   async created() {
     this.token = window.Laravel.csrfToken;
@@ -363,5 +334,16 @@ export default {
       this.swr();
     }
   },
+  computed: {
+    ...mapGetters(["getDeleteModalObj"])
+  },
+
+  watch: {
+    getDeleteModalObj(obj) {
+      if (obj.isDeleted) {
+        this.categories.splice(obj.deletingIndex, 1);
+      }
+    }
+  }
 };
 </script>
