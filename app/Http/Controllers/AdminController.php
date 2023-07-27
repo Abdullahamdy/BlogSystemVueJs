@@ -104,7 +104,7 @@ class AdminController extends Controller
 
 
     public function getusers(){
-       return  User::orderBy('id', 'desc')->get();
+       return  User::orderBy('id', 'desc')->where('userType','!=','user')->get();
     }
     public function createuser(Request $request){
         $this->validate($request, [
