@@ -38,7 +38,8 @@ export default {
             const res = await this.callApi("post", "/app/admin_login", this.data);
             if (res.status == 200) {
                 this.s(res.data.msg)
-                this.isLoggedIn = true
+                window.location = '/'
+
             }else if(res.status = 422){
                 for (let i in res.data.errors) {
                         this.e(res.data.errors[i][0]);

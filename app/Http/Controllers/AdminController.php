@@ -10,6 +10,30 @@ use Illuminate\Support\Facades\Auth;
 
 class AdminController extends Controller
 {
+
+    public function index(Request $request){
+        if(!Auth::check() && $request->path() != 'login'){
+            return redirect('/login');
+        }
+        if(!Auth::check() && $request->path() == 'login'){
+            return view('welcome');
+        }
+
+        $user = Auth::user();
+        if($user->userType == 'User'){
+            return redirect('/login');
+
+        }
+        if($request->path() == 'login'){
+            return redirect('/');
+        }
+        return view('welcome');
+
+    }
+    public function logout(){
+        Auth::logout();
+        return redirect('/login');
+    }
     public function createtag(Request $request)
     {
         $this->validate($request, [
@@ -155,9 +179,14 @@ class AdminController extends Controller
             'password' => 'bail|required|min:6',
         ]);
         if(Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
-             return response()->json(['msg'=>'YOu Are Login']);
+            $user = Auth::user();
+            if($user->userType == 'User'){
+                Auth::logout();
+                return response()->json(['msg'=>'Incorrect Login Details']);
+            }
+             return response()->json(['msg'=>'You Are Login','user'=>$user]);
             }else{
-            return response()->json(['msg'=>'Invalid Credentials'],401);
+            return response()->json(['msg'=>'Invalid Credentials']);
 
         }
     }

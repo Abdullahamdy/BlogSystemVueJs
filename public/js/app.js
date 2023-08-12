@@ -2225,7 +2225,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               res = _context.sent;
               if (res.status == 200) {
                 _this.s(res.data.msg);
-                _this.isLoggedIn = true;
+                window.location = '/';
               } else if (res.status = 422) {
                 for (i in res.data.errors) {
                   _this.e(res.data.errors[i][0]);
@@ -3377,10 +3377,14 @@ __webpack_require__.r(__webpack_exports__);
 //
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  props: ['user'],
   data: function data() {
     return {
       isLoggedIn: false
     };
+  },
+  created: function created() {
+    this.$store.commit('setUpdateUser', this.user);
   }
 });
 
@@ -69816,7 +69820,7 @@ var render = function () {
   return _c(
     "div",
     [
-      _vm.isLoggedIn
+      _vm.$store.state.user
         ? _c("div", [
             _c("div", { staticClass: "_1side_menu" }, [
               _vm._m(0),

@@ -21,10 +21,10 @@ class UserAdminSeeder extends Seeder
             'userType'=>'Admin',
         ]);
         User::create([
-            'fullName'=>'Admin',
-            'email'=>'admin@gmail.com',
+            'fullName'=>'User',
+            'email'=>'user@gmail.com',
             'password'=>bcrypt(11111111),
-            'userType'=>'Editor',
+            'userType'=>'User',
         ]);
     }
 }
