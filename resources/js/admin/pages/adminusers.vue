@@ -46,10 +46,11 @@
                     <div class="space">
                         <Input type="password" v-model="data.password" placeholder="Password" />
                     </div>
-                    <div class="space">
-                        <Select v-model="data.userType" placeholder="Enter User Type">
-                            <Option value="Admin">Admin</Option>
-                            <Option value="Editor">Editor</Option>
+
+                        <div class="space">
+                        <Select v-model="data.role_id" placeholder="select Role">
+                            <Option v-for="role in roles" :value="role.id" :key="role.id" v-if="roles.length >0">{{ role.roleName }}</Option>
+
                         </Select>
                     </div>
 
@@ -76,11 +77,12 @@
 
                     </div>
                     <div class="space">
-                        <Select v-model="editData.userType" placeholder="Enter User Type">
-                            <Option value="Admin">Admin</Option>
-                            <Option value="Editor">Editor</Option>
+                        <Select v-model="editData.role_id"  placeholder="Select admin type">
+                            <Option value="Admin" >Admin</Option>
+                            <Option value="Editor" >Editor</Option>
                         </Select>
                     </div>
+                 
 
 
                     <div slot="footer">
@@ -110,17 +112,18 @@ export default {
                 fullName: "",
                 email: "",
                 password: "",
-                userType: "",
+                role_id:""
             },
             addModal: false,
             editModal: false,
             isAdding: false,
             users: [],
+            roles: [],
             editData: {
                 fullName: "",
                 email: "",
                 password: "",
-                userType: "",
+                role_id: "",
             },
             index: -1,
             showDeleteModal: false,
@@ -155,7 +158,7 @@ export default {
             if (res.status == 200) {
                 this.users[this.index].fullName = this.editData.fullName;
                 this.users[this.index].email = this.editData.email;
-                this.users[this.index].userType = this.editData.userType;
+                this.users[this.index].role_id = this.editData.role_id;
                 this.s("User has been updated Successfully!");
                 this.editModal = false;
             } else {
@@ -176,7 +179,6 @@ export default {
                 id: user.id,
                 fullName: user.fullName,
                 email: user.email,
-                userType: user.userType,
             };
 
             this.editData = obj;
@@ -201,9 +203,18 @@ export default {
     },
 
     async created() {
-        const res = await this.callApi("get", "/app/get_users");
+        const [res,resRole] = await Promise.all([
+        this.callApi("get", "/app/get_users"),
+         this.callApi("get", "/app/get_roles"),
+        ]);
+
         if (res.status == 200) {
             this.users = res.data;
+        } else {
+            this.swr();
+        }
+        if (resRole.status == 200) {
+            this.roles = resRole.data;
         } else {
             this.swr();
         }

@@ -11,6 +11,7 @@ import category from './admin/pages/category'
 import notfound from './admin/pages/notfound'
 import adminusers from './admin/pages/adminusers'
 import login from './admin/pages/Login.vue'
+import role from './admin/pages/role.vue'
 Vue.use(VueRouter)
 
 
@@ -38,6 +39,11 @@ const routes = [
     {
         path: '/tags',
         component: tags,
+
+    },
+    {
+        path: '/role',
+        component: role,
 
     },
     {

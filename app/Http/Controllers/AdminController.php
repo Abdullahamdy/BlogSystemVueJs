@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Role;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -136,7 +137,7 @@ class AdminController extends Controller
             'fullName' => 'required',
             'email' => 'bail|required|email',
             'password' => 'bail|required|min:6',
-            'userType' => 'required',
+            'role_id' => 'required',
         ]);
 
         $password = bcrypt($request->password);
@@ -144,7 +145,7 @@ class AdminController extends Controller
             'fullName'=>$request->fullName,
             'email'=>$request->email,
             'password'=>$password,
-            'userType'=>$request->userType,
+            'role_id'=>$request->role_id,
         ]);
 
         return $user;
@@ -152,19 +153,20 @@ class AdminController extends Controller
     }
 
     public function edituser(Request $request){
+
         $this->validate($request, [
             'id' => 'required',
             'fullName' => 'required',
             'email' => 'bail|required|email',
             'password' => 'bail|required|min:6',
-            'userType' => 'required',
+            'role_id'=>$request->role_id,
         ]);
         $password = bcrypt($request->password);
         return   User::where('id', $request->id)->update([
             'fullName' => $request->fullName,
             'email' => $request->email,
             'password'=>$password,
-            'userType'=>$request->userType,
+            'role_id'=>$request->role_id,
         ]);
     }
 
@@ -180,7 +182,7 @@ class AdminController extends Controller
         ]);
         if(Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
             $user = Auth::user();
-            if($user->userType == 'User'){
+            if($user->role->isAdmin == 0){
                 Auth::logout();
                 return response()->json(['msg'=>'Incorrect Login Details']);
             }
@@ -189,6 +191,36 @@ class AdminController extends Controller
             return response()->json(['msg'=>'Invalid Credentials']);
 
         }
+    }
+    public function getroles(){
+        return Role::orderBy('id', 'desc')->get();
+    }
+
+    public function addrole(Request $request)
+    {
+        $this->validate($request, [
+            'roleName' => 'required'
+        ]);
+        $role = Role::create(['roleName' => $request->roleName]);
+        return response()->json(['status' => 200, 'role' => $role]);
+    }
+
+
+    public function editrole(Request $request)
+    {
+
+        $this->validate($request, [
+            'id' => 'required',
+            'roleName' => 'required',
+        ]);
+        return   Role::where('id', $request->id)->update([
+            'roleName' => $request->roleName,
+        ]);
+    }
+
+    public function deleterole(Request $request){
+        $role =   Role::where('id', $request->id)->first();
+        $role->delete();
     }
 
 }
