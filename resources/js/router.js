@@ -12,6 +12,7 @@ import notfound from './admin/pages/notfound'
 import adminusers from './admin/pages/adminusers'
 import login from './admin/pages/Login.vue'
 import role from './admin/pages/role.vue'
+import assignRole from './admin/pages/assignRole.vue'
 Vue.use(VueRouter)
 
 
@@ -21,6 +22,7 @@ const routes = [
     {
         path: '/',
         component: home,
+        name: 'home',
 
     },
     {
@@ -32,28 +34,41 @@ const routes = [
     {
         path: '/login',
         component: login,
-        name: 'notfound'
+        name: 'login'
 
     },
 
     {
         path: '/tags',
         component: tags,
+        name: 'tags',
+
 
     },
     {
         path: '/role',
         component: role,
+        name: 'role',
+
+
+    },
+    {
+        path: '/assignRole',
+        component: assignRole,
+        name:'assignRole'
 
     },
     {
         path: '/adminusers',
         component: adminusers,
+        name: 'adminusers',
+
 
     },
     {
         path: '/category',
         component: category,
+        name: category,
 
     },
 
