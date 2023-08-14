@@ -12,26 +12,40 @@ use Illuminate\Support\Facades\Auth;
 class AdminController extends Controller
 {
 
-    public function index(Request $request){
-        if(!Auth::check() && $request->path() != 'login'){
+    public function index(Request $request)
+    {
+        if (!Auth::check() && $request->path() != 'login') {
             return redirect('/login');
         }
-        if(!Auth::check() && $request->path() == 'login'){
+        if (!Auth::check() && $request->path() == 'login') {
             return view('welcome');
         }
 
         $user = Auth::user();
-        if($user->userType == 'User'){
+        if ($user->userType == 'User') {
             return redirect('/login');
-
         }
-        if($request->path() == 'login'){
+        if ($request->path() == 'login') {
             return redirect('/');
         }
-        return view('welcome');
-
+        return $this->checkPermission($user);
     }
-    public function logout(){
+    public function checkPermission($user)
+    {
+        $permissions = json_decode($user->role->permission);
+        $haspermission = false;
+        foreach ($permissions as $per) {
+            if ($per->name == request()->path()) {
+                if ($per->read) {
+                    $haspermission = true;
+                }
+            }
+        }
+        if ($haspermission) return view('welcome');
+        return view('notfound');
+    }
+    public function logout()
+    {
         Auth::logout();
         return redirect('/login');
     }
@@ -86,7 +100,8 @@ class AdminController extends Controller
         $this->deleteFileFromServer($fileName);
         return 'done';
     }
-    public function addcategory(Request $request){
+    public function addcategory(Request $request)
+    {
         $this->validate($request, [
             'categoryName' => 'required',
             'iconImage' => 'required',
@@ -97,10 +112,10 @@ class AdminController extends Controller
     public function deleteFileFromServer($fileName)
     {
 
-        if (file_exists(public_path(request()->isAdd ? 'uploads/' . $fileName:$fileName))) {
-            unlink(public_path(request()->isAdd ? 'uploads/' . $fileName :$fileName));
+        if (file_exists(public_path(request()->isAdd ? 'uploads/' . $fileName : $fileName))) {
+            unlink(public_path(request()->isAdd ? 'uploads/' . $fileName : $fileName));
         }
-        return ;
+        return;
     }
 
     public function editcategory(Request $request)
@@ -116,12 +131,13 @@ class AdminController extends Controller
         ]);
     }
 
-    public function deletecategory(Request $request){
+    public function deletecategory(Request $request)
+    {
 
         $category =   Category::where('id', $request->id)->first();
         $fileName = $category->iconImage;
-        if($category){
-            if (file_exists(public_path( $fileName))) {
+        if ($category) {
+            if (file_exists(public_path($fileName))) {
                 unlink(public_path($fileName));
                 $category->delete();
             }
@@ -129,10 +145,12 @@ class AdminController extends Controller
     }
 
 
-    public function getusers(){
-       return  User::orderBy('id', 'desc')->get();
+    public function getusers()
+    {
+        return  User::orderBy('id', 'desc')->get();
     }
-    public function createuser(Request $request){
+    public function createuser(Request $request)
+    {
         $this->validate($request, [
             'fullName' => 'required',
             'email' => 'bail|required|email',
@@ -142,57 +160,59 @@ class AdminController extends Controller
 
         $password = bcrypt($request->password);
         $user =  User::create([
-            'fullName'=>$request->fullName,
-            'email'=>$request->email,
-            'password'=>$password,
-            'role_id'=>$request->role_id,
+            'fullName' => $request->fullName,
+            'email' => $request->email,
+            'password' => $password,
+            'role_id' => $request->role_id,
         ]);
 
         return $user;
-
     }
 
-    public function edituser(Request $request){
+    public function edituser(Request $request)
+    {
 
         $this->validate($request, [
             'id' => 'required',
             'fullName' => 'required',
             'email' => 'bail|required|email',
             'password' => 'bail|required|min:6',
-            'role_id'=>$request->role_id,
+            'role_id' => 'required',
         ]);
         $password = bcrypt($request->password);
         return   User::where('id', $request->id)->update([
             'fullName' => $request->fullName,
             'email' => $request->email,
-            'password'=>$password,
-            'role_id'=>$request->role_id,
+            'password' => $password,
+            'role_id' => $request->role_id,
         ]);
     }
 
-    public function deleteuser(Request $request){
+    public function deleteuser(Request $request)
+    {
         $user =   User::where('id', $request->id)->first();
         $user->delete();
     }
 
-    public function adminLogin(Request $request){
+    public function adminLogin(Request $request)
+    {
         $this->validate($request, [
             'email' => 'bail|required|email',
             'password' => 'bail|required|min:6',
         ]);
-        if(Auth::attempt(['email'=>$request->email,'password'=>$request->password])){
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = Auth::user();
-            if($user->role->isAdmin == 0){
+            if ($user->role->isAdmin == 0) {
                 Auth::logout();
-                return response()->json(['msg'=>'Incorrect Login Details']);
+                return response()->json(['msg' => 'Incorrect Login Details']);
             }
-             return response()->json(['msg'=>'You Are Login','user'=>$user]);
-            }else{
-            return response()->json(['msg'=>'Invalid Credentials']);
-
+            return response()->json(['msg' => 'You Are Login', 'user' => $user]);
+        } else {
+            return response()->json(['msg' => 'Invalid Credentials']);
         }
     }
-    public function getroles(){
+    public function getroles()
+    {
         return Role::orderBy('id', 'desc')->get();
     }
 
@@ -218,9 +238,14 @@ class AdminController extends Controller
         ]);
     }
 
-    public function deleterole(Request $request){
+    public function deleterole(Request $request)
+    {
         $role =   Role::where('id', $request->id)->first();
         $role->delete();
     }
 
+    public function assignrole(Request $request)
+    {
+        return  Role::find($request->id)->update($request->except('id'));
+    }
 }
