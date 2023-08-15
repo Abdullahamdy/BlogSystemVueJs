@@ -28,11 +28,13 @@ class AdminController extends Controller
         if ($request->path() == 'login') {
             return redirect('/');
         }
+
         return $this->checkPermission($user);
     }
     public function checkPermission($user)
     {
-        $permissions = json_decode($user->role->permission);
+      $permissions = json_decode($user->role->permission);
+        if(!$permissions) return view('welcome');
         $haspermission = false;
         foreach ($permissions as $per) {
             if ($per->name == request()->path()) {

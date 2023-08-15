@@ -25,12 +25,18 @@ export default new Vuex.Store({
         getDeleteModalObj(state){
             return state.deleteModalObj
         },
+
+        getUserPermission(state){
+            return state.userPermission
+        },
+
     },
 
     mutations: {
         changeTheCounter(state, data){
             state.conuter += data
         },
+
         setDeleteModal(state, data){
             const deleteModalObj = {
                 showDeleteModal: false,
@@ -48,7 +54,7 @@ export default new Vuex.Store({
             state.user = data
         },
         setUserPermission(state, data){
-            state.userPermission = data
+           return state.userPermission = data
         },
 
     },

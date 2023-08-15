@@ -17,11 +17,11 @@
 
                     <!--~~~ MENU LIST ~~~~~~-->
                     <div class="_1side_menu_list">
-                        <ul class="_1side_menu_list_ul">
-                            <li>
-                                <router-link to='/'> Dashboard</router-link>
+                        <ul class="_1side_menu_list_ul" v-for="(MenuItem,i) in permissions" v-if="permissions.length" :key="i">
+                            <li v-if="MenuItem.read">
+                                <router-link :to='MenuItem.name' > {{ MenuItem.resourceName }}</router-link>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <router-link to='/tags'> Tag</router-link>
                             </li>
                             <li>
@@ -34,7 +34,7 @@
                             </li>
 
                             <li><router-link to="role"><Icon type="ios-speedometer" /> Role Management</router-link></li>
-                            <li><router-link to="assignRole"><Icon type="ios-speedometer" /> Assign role</router-link></li>
+                            <li><router-link to="assignRole"><Icon type="ios-speedometer" /> Assign role</router-link></li> -->
 
                             <!-- <li><router-link to="tags"><Icon type="ios-speedometer" /> Tags</router-link></li>
               <li><router-link to="category"><Icon type="ios-speedometer" /> Category</router-link></li>
@@ -43,10 +43,10 @@
             -->
 
 
-                            <li><a href="/logout">
-                                    <Icon type="ios-speedometer" /> Logout
-                                </a></li>
-                        </ul>
+        </ul>
+        <li><a href="/logout">
+                <Icon type="ios-speedometer" /> Logout
+            </a></li>
                     </div>
                 </div>
             </div>
@@ -73,7 +73,7 @@
 
 <script>
 export default {
-    props:['user'],
+    props:['user','permissions'],
     data() {
         return {
             isLoggedIn: false,
@@ -82,6 +82,8 @@ export default {
     },
     created(){
         this.$store.commit('setUpdateUser',this.user)
+        this.$store.commit('setUserPermission',this.permissions)
+
     }
 }
 

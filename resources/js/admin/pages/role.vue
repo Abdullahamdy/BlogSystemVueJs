@@ -200,7 +200,6 @@
 
 
       showDeletingModal(role,i){
-          console.log(role)
           this.deleteItem = role;
           this.DeletingIndex = i;
           this.showDeleteModal = true;
