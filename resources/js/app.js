@@ -7,6 +7,9 @@ import 'view-design/dist/styles/iview.css';
 import common from './common';
 Vue.mixin(common)
 Vue.use(ViewUI);
+import Editor from 'vue-editor-js'
+
+Vue.use(Editor)
 
 
 Vue.component('mainapp', require('./components/mainapp.vue').default)

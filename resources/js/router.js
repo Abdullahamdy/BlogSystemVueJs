@@ -13,6 +13,7 @@ import adminusers from './admin/pages/adminusers'
 import login from './admin/pages/Login.vue'
 import role from './admin/pages/role.vue'
 import assignRole from './admin/pages/assignRole.vue'
+import createblog from './admin/pages/createblog.vue'
 Vue.use(VueRouter)
 
 
@@ -69,6 +70,12 @@ const routes = [
         path: '/category',
         component: category,
         name: category,
+
+    },
+    {
+        path: '/createblog',
+        component: createblog,
+        name: createblog,
 
     },
 
