@@ -40,6 +40,7 @@ Route::middleware([AdminCheck::class])->prefix('app')->group(function () {
     Route::post('/delete_role', [AdminController::class, 'deleterole']);
     Route::post('/assign_role', [AdminController::class, 'assignrole']);
 });
+Route::post('createblog',[AdminController::class,'upload']);
 Route::get('/logout', [AdminController::class, 'logout']);
 Route::get('/', [AdminController::class, 'index']);
 Route::any('{slug}', [AdminController::class, 'index']);

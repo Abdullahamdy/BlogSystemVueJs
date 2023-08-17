@@ -11,24 +11,27 @@
                         </Button>
                     </p>
 
-                    <div class="_overflow _table_div">
+                    <div class="_overflow _table_div blog_editor">
+                        <editor ref="editor"
+                         autofocus holder-id="codex-editor"
+                          save-button-id="save-button"
+                            :init-data="initData"
+                             @save="onSave"
+                             :config="config"
+                             />
 
-                        <editor
-                                ref="editor"
-                                autofocus
-                                holder-id="codex-editor"
-                                save-button-id="save-button"
-                                :init-data="initData"
-                                @save="onSave"
-								:config="config"
-							/>
-
-
-                        <Button @click="save">Save</Button>
+                        </div>
 
 
-                    </div>
+                        <div class="_input_field">
+                            <input type="text" placeholder="title">
+                        </div>
+                        <div class="_input_field">
+
+                            <Button @click="save">Save</Button>
+                        </div>
                 </div>
+                
 
             </div>
         </div>
@@ -79,9 +82,9 @@ export default {
             console.log(response)
 
         },
-       async save() {
-         this.$refs.editor.save();
-            
+        async save() {
+            this.$refs.editor.save();
+
 
         }
 
@@ -89,3 +92,28 @@ export default {
     },
 };
 </script>
+<style>
+.blog_editor {
+    width: 717px;
+    margin-left: 160px;
+    padding: 4px 7px;
+    font-size: 14px;
+    border: 1px solid #dcdee2;
+    border-radius: 4px;
+    color: #515a6e;
+    background-color: #fff;
+    background-image: none;
+    z-index: -1;
+}
+
+.blog_editor:hover {
+    border: 1px solid #57a3f3;
+}
+
+._input_field {
+    margin: 20px 0 0 160px;
+    width: 717px;
+}
+</style>
+
+

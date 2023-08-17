@@ -33,8 +33,8 @@ class AdminController extends Controller
     }
     public function checkPermission($user)
     {
-      $permissions = json_decode($user->role->permission);
-        if(!$permissions) return view('welcome');
+        $permissions = json_decode($user->role->permission);
+        if (!$permissions) return view('welcome');
         $haspermission = false;
         foreach ($permissions as $per) {
             if ($per->name == request()->path()) {
@@ -249,5 +249,21 @@ class AdminController extends Controller
     public function assignrole(Request $request)
     {
         return  Role::find($request->id)->update($request->except('id'));
+    }
+
+    public function upload(Request $request)
+    {
+        $this->validate($request, [
+            'image' => 'required|mimes:jpeg,jpg,png',
+        ]);
+        $picName = time() . '.' . $request->image->extension();
+        $request->image->move(public_path('uploads'), $picName);
+        return response()->json([
+            'success' => 1,
+            'file' => [
+                'url' => "http://localhost:8000/uploads/$picName",
+            ]
+        ]);
+        return $picName;
     }
 }
