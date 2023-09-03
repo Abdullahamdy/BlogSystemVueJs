@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Blog;
+use App\Models\Blogcategory;
+use App\Models\Blogtag;
 use App\Models\Category;
 use App\Models\Role;
 use App\Models\Tag;
@@ -181,6 +184,7 @@ class AdminController extends Controller
             'password' => 'bail|required|min:6',
             'role_id' => 'required',
         ]);
+        // dd($request->id);
         $password = bcrypt($request->password);
         return   User::where('id', $request->id)->update([
             'fullName' => $request->fullName,
@@ -265,5 +269,30 @@ class AdminController extends Controller
             ]
         ]);
         return $picName;
+    }
+
+    public function createBlog(Request $request)
+    {
+        // dd($request->all());
+        $blog = Blog::create([
+            'title' => $request->title,
+            'post' => $request->post,
+            'post_excerpt' => $request->post_excerpt,
+            'metaDescription' => $request->metaDescription,
+            'user_id' => Auth::id(),
+            'jsonData' => $request->jsonData,
+            'slug' => '',
+        ]);
+        $blogCategories = [];
+        foreach ($request->category_id as $ca) {
+            array_push($blogCategories, ['category_id' => $ca, 'blog_id' => $blog->id]);
+        }
+        Blogcategory::insert($blogCategories);
+        $blogTags = [];
+        foreach ($request->tag_id as $ta) {
+            array_push($blogTags, ['tag_id' => $ta, 'blog_id' => $blog->id]);
+        }
+        Blogtag::insert($blogTags);
+        return 'done';
     }
 }
