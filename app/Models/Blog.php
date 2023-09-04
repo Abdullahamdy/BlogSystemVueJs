@@ -20,4 +20,10 @@ class Blog extends Model
         $newCount = $count > 0 ? ++$count : '';
         return $newCount > 0 ? "$slug-$newCount" : $slug;
     }
+    public function tag(){
+        return $this->belongsToMany(Tag::class,'blogtags');
+    }
+    public function cat(){
+        return $this->belongsToMany(Category::class,'blogcategories');
+    }
     }

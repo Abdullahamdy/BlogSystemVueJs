@@ -14,14 +14,9 @@ class TagSeeder extends Seeder
      */
     public function run()
     {
-        Tag::create(['tagName'=>'Clothes']);
-        Tag::create(['tagName'=>'Shoes']);
-        Tag::create(['tagName'=>'Watches']);
-        Tag::create(['tagName'=>'Electronics']);
-        Tag::create(['tagName'=>'Men']);
-        Tag::create(['tagName'=>'Women']);
-        Tag::create(['tagName'=>'Boys']);
-        Tag::create(['tagName'=>'Girls']);
-
+        Tag::create(['tagName'=>'Css']);
+        Tag::create(['tagName'=>'Html']);
+        Tag::create(['tagName'=>'Bootstrap']);
+        Tag::create(['tagName'=>'JavaScript']);
     }
 }

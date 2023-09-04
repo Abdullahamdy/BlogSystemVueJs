@@ -297,9 +297,14 @@ class AdminController extends Controller
             Blogtag::insert($blogTags);
             DB::commit();
             return 'done';
-        } catch (\Throwable) {
+        } catch (\Throwable $err) {
             DB::rollBack();
-            return 'not done';
+            return $err;
         }
+    }
+
+    public function blogdata(){
+       return Blog::with(['cat','tag'])->get();
+
     }
 }
