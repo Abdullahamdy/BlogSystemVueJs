@@ -40,13 +40,13 @@
                       type="info"
                       size="small"
                       @click="showEditModal(blog, i)"
-                      v-if="isUpdatePermitted" >Edit</Button
+                    >Edit</Button
                     >
                     <Button
                     @click="showDeletingModal(blog,i)"
                       type="error"
                       size="small"
-                      v-if="isDeletePermitted" >Delete</Button
+                      >Delete</Button
                     >
                   </td>
                 </tr>
@@ -75,7 +75,7 @@
               <Button type="default" size="large" @click="showDeleteModal = false"
                 >Close</Button
               >
-              <Button type="error" size="large"  :loading="isDeleting" :disabled="isDeleting">Deletee</Button>
+              <Button type="error" size="large"  :loading="isDeleting" :disabled="isDeleting" @click="Deleteblog">Deletee</Button>
             </div>
           </Modal>
         </div>
@@ -99,7 +99,19 @@ import {mapGetters} from 'vuex'
       };
     },
     methods: {
+        async Deleteblog() {
 
+          this.isDeleting = true;
+        const res = await this.callApi("post", "/app/delete_blog", this.deleteItem);
+        if (res.status == 200) {
+          this.blogs.splice(this.DeletingIndex, 1);
+          this.s("Tag has been deleteted successfully");
+        } else {
+          this.swr();
+        }
+        this.isDeleting = false;
+        this.showDeleteModal = false;
+      },
 
 
       //end edit data function
@@ -115,8 +127,9 @@ import {mapGetters} from 'vuex'
         this.index = index;
       },
 
-      showDeletingModal(tag,i){
-          this.deleteItem = tag;
+      showDeletingModal(blog,i){
+        console.log(i)
+          this.deleteItem = blog;
           this.DeletingIndex = i;
           this.showDeleteModal = true;
 

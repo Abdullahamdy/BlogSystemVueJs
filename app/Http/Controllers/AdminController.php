@@ -307,4 +307,10 @@ class AdminController extends Controller
        return Blog::with(['cat','tag'])->get();
 
     }
+
+
+    public function deleteBlog(Request $request){
+        $blog =   Blog::where('id', $request->id)->first();
+        $blog->delete();
+    }
 }
