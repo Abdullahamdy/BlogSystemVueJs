@@ -23,8 +23,9 @@ class RoleSeeder extends Seeder
         { resourceName: 'Create Blog', read: true, write: true, update: true, delete: true, name: 'createblogs' },
         { resourceName: 'Assign Role', read: true, write: true, update: true, delete: true, name: 'assignRole' },
         { resourceName: 'Adminusers', read: true, write: true, update: true, delete: true, name: 'adminusers' },
-        { resourceName: 'Category', read: true, write: true, update: true, delete: true, name: 'category' }]",
-            'isAdmin' => 1,
+        { resourceName: 'Category', read: true, write: true, update: true, delete: true, name: 'category' },
+        { resourceName: 'Blogs', read: false, write: false, update: false, delete: false, name: 'blogs' }]",
+        'isAdmin' => 1,
 
         ]);
         Role::create(['roleName' => 'Editor', 'permission' => null]);

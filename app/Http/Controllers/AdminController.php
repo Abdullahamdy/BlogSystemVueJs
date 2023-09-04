@@ -283,7 +283,7 @@ class AdminController extends Controller
                 'metaDescription' => $request->metaDescription,
                 'user_id' => Auth::id(),
                 'jsonData' => $request->jsonData,
-                'slug' => '',
+                'slug' => $request->title,
             ]);
             $blogCategories = [];
             foreach ($request->category_id as $ca) {

@@ -73,7 +73,7 @@ export default {
                 { resourceName: 'Assign Role', read: false, write: false, update: false, delete: false, name: 'assignRole' },
                 { resourceName: 'Adminusers', read: false, write: false, update: false, delete: false, name: 'adminusers' },
                 { resourceName: 'Category', read: false, write: false, update: false, delete: false, name: 'category' },
-            ],
+                { resourceName: 'Blogs', read: false, write: false, update: false, delete: false, name: 'blogs' },            ],
             defaultPermission: [
                 { resourceName: 'Home', read: false, write: false, update: false, delete: false, name: '/' },
                 { resourceName: 'Tags', read: false, write: false, update: false, delete: false, name: 'tags' },
@@ -82,6 +82,7 @@ export default {
                 { resourceName: 'Assign Role', read: false, write: false, update: false, delete: false, name: 'assignRole' },
                 { resourceName: 'Adminusers', read: false, write: false, update: false, delete: false, name: 'adminusers' },
                 { resourceName: 'Category', read: false, write: false, update: false, delete: false, name: 'category' },
+                { resourceName: 'Blogs', read: false, write: false, update: false, delete: false, name: 'blogs' },
             ],
         };
     },
@@ -115,10 +116,11 @@ export default {
         const res = await this.callApi("get", "/app/get_roles")
         if (res.status == 200) {
             this.roles = res.data;
+            console.log(this.roles)
             if (res.data.length) {
-                this.data.id = res.data[3].id;
-                if (res.data[3].permission)
-                    this.resources = JSON.parse(res.data[3].permission)
+                this.data.id = res.data[1].id;
+                if (res.data[1].permission)
+                    this.resources = JSON.parse(res.data[1].permission)
             }
         } else {
             this.swr();
