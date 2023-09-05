@@ -313,4 +313,40 @@ class AdminController extends Controller
         $blog =   Blog::where('id', $request->id)->first();
         $blog->delete();
     }
+
+    public function editBlog(Request $request, $id){
+         return Blog::with(['tag','cat'])->where('id',$id)->first();
+    }
+
+    public function updateBlog(Request $request,Blog $blog){
+        DB::beginTransaction();
+        try {
+            $blog->update([
+                'title' => $request->title,
+                'post' => $request->post,
+                'post_excerpt' => $request->post_excerpt,
+                'metaDescription' => $request->metaDescription,
+                'user_id' => Auth::id(),
+                'jsonData' => $request->jsonData,
+                'slug' => $request->title,
+            ]);
+            $blogCategories = [];
+            foreach ($request->category_id as $ca) {
+                array_push($blogCategories, ['category_id' => $ca, 'blog_id' => $blog->id]);
+            }
+            Blogcategory::where('blog_id',$blog->id)->delete();
+            Blogcategory::insert($blogCategories);
+            $blogTags = [];
+            foreach ($request->tag_id as $ta) {
+                array_push($blogTags, ['tag_id' => $ta, 'blog_id' => $blog->id]);
+            }
+            Blogtag::where('blog_id',$blog->id)->delete();
+            Blogtag::insert($blogTags);
+            DB::commit();
+            return 'done';
+        } catch (\Throwable $err) {
+            DB::rollBack();
+            return $err;
+        }
+    }
 }
